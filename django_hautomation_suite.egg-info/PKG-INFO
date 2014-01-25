@@ -1,0 +1,17 @@
+Metadata-Version: 1.1
+Name: django-hautomation-suite
+Version: 0.1
+Summary: Django project to help deploy the Home Automation Python Project
+Home-page: http://blog.digitalhigh.es
+Author: Javier Pardo Blasco(jpardobl)
+Author-email: jpardo@digitalhigh.es
+License: BSD License
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Topic :: Home Automation
