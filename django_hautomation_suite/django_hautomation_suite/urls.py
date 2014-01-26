@@ -1,17 +1,26 @@
 from django.conf.urls import patterns, include, url
-
+from django.conf import settings
 # Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
+from django.contrib import admin
+admin.autodiscover()
+urlpatterns = patterns("",
+    url(r'^admin/', include(admin.site.urls)),)
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'django_hautomation_suite.views.home', name='home'),
-    # url(r'^django_hautomation_suite/', include('django_hautomation_suite.foo.urls')),
-    url(r'rest/', include('harest.urls')),
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-)
+if settings.DJANGO_HAUTOMATION_DEPLOYED:
+    urlpatterns = urlpatterns + patterns('',
+       
+        url(r'rest/', include('harest.urls')),
+    )
+if settings.DJANGO_HAWEB_DEPLOYED:
+    urlpatterns = urlpatterns + patterns('',        
+        url(r'^ha/', include("haweb.urls")),
+    )
+if settings.DJANGO_THERMOMETER_DEPLOYED:
+    urlpatterns = urlpatterns + patterns('',        
+        url(r'^thermometer/', include("django_thermometer.urls")),
+    )    
+if settings.DJANGO_THERMOSTAT_DEPLOYED:
+    urlpatterns = urlpatterns + patterns('',        
+        url(r'thermostat/', include('django_thermostat.urls')),
+    # url(r'^dev_therm/', include('dev_therm.foo.urls')),
+    )   

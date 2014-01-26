@@ -9,6 +9,17 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+#used by the haweb to find the REST API server
+HA_SERVER = "HA_REST_API_HOST"
+HA_PASSWORD = "HA_REST_API_PASSWORD"
+HA_USERNAME = "HA_REST_API_USERNAME"
+
+
+DJANGO_HAUTOMATION_DEPLOYED = HA_DJANGO_HAUTOMATION_DEPLOYED
+DJANGO_HAWEB_DEPLOYED = HA_DJANGO_HAWEB_DEPLOYED
+DJANGO_THERMOMETER_DEPLOYED = HA_DJANGO_THERMOMETER_DEPLOYED
+DJANGO_THERMOSTAT_DEPLOYED = HA_DJANGO_THERMOSTAT_DEPLOYED
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.HA_DB_TYPE', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
@@ -23,7 +34,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [HA_WEB_SERVER_NAME]
+ALLOWED_HOSTS = ["HA_WEB_SERVER_NAME", ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -120,12 +131,20 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     "ha_cfg",
+    
     "hacore",
     "harest",
     
+    "haweb",
+    "compressor",
+    
+    "django_thermometer",
+    
+    "django_thermostat",
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

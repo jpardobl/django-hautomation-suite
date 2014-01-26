@@ -9,10 +9,21 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+#used by the haweb to find the REST API server
+HA_SERVER = "raspberry"
+HA_PASSWORD = "soportep"
+HA_USERNAME = "raton"
+
+
+DJANGO_HAUTOMATION_DEPLOYED = False
+DJANGO_HAWEB_DEPLOYED = True
+DJANGO_THERMOMETER_DEPLOYED = False
+DJANGO_THERMOSTAT_DEPLOYED = False
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.HA_DB_TYPE', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'HA_DB_NAME',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'tartaja.sqlite',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'HA_DB_USER',
         'PASSWORD': 'HA_DB_PASSWORD',
@@ -23,13 +34,13 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = [HA_WEB_SERVER_NAME]
+ALLOWED_HOSTS = ["localhost", ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'HA_TIME_ZONE'
+TIME_ZONE = 'Europe/Madrid'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html

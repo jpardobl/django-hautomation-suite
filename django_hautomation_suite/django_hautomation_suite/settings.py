@@ -9,27 +9,38 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+#used by the haweb to find the REST API server
+HA_SERVER = "http://raspberry"
+HA_PASSWORD = "soportep"
+HA_USERNAME = "raton"
+
+
+DJANGO_HAUTOMATION_DEPLOYED = False
+DJANGO_HAWEB_DEPLOYED = True
+DJANGO_THERMOMETER_DEPLOYED = False
+DJANGO_THERMOSTAT_DEPLOYED = False
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': '',                      # Or path to database file if using sqlite3.
+        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'tartaja.sqlite',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'USER': 'HA_DB_USER',
+        'PASSWORD': 'HA_DB_PASSWORD',
+        'HOST': 'HA_DB_HOST',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': 'HA_DB_PORT',                      # Set to empty string for default.
     }
 }
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["localhost", ]
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
 # In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'America/Chicago'
+TIME_ZONE = 'Europe/Madrid'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
@@ -121,6 +132,14 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "ha_cfg",
+    "hacore",
+    "harest",
+    "haweb",
+    "compressor",
+    "django_thermometer",
+    "django_thermostat",
+    # Uncomment the next line to enable the admin:
+    'django.contrib.admin',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
