@@ -257,7 +257,7 @@ class Command(BaseCommand):
         self.apply_settings(self.server())
         self.apply_settings(self.time_zone())
         while True:
-            harest = raw_input("Want to deploy the Home Automation Python Project REST API server (module django_hautomation)? Yes|No")
+            harest = raw_input("Want to deploy the Home Automation Python Project REST API server (module django_hautomation)? Yes|No: ")
             if harest not in ("No", "Yes"):
                 self.stderr.write("Answer not valid. Yes or No?")
                 continue
