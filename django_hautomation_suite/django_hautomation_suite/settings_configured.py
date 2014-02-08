@@ -10,20 +10,20 @@ ADMINS = (
 MANAGERS = ADMINS
 
 #used by the haweb to find the REST API server
-HA_SERVER = "raspberry"
-HA_PASSWORD = "soportep"
-HA_USERNAME = "raton"
+HA_SERVER = "HA_REST_API_HOST"
+HA_PASSWORD = "HA_REST_API_PASSWORD"
+HA_USERNAME = "HA_REST_API_USERNAME"
 
 
 DJANGO_HAUTOMATION_DEPLOYED = False
-DJANGO_HAWEB_DEPLOYED = True
+DJANGO_HAWEB_DEPLOYED = False
 DJANGO_THERMOMETER_DEPLOYED = False
-DJANGO_THERMOSTAT_DEPLOYED = False
+DJANGO_THERMOSTAT_DEPLOYED = True
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'tartaja.sqlite',                      # Or path to database file if using sqlite3.
+        'NAME': 'ggggg',                      # Or path to database file if using sqlite3.
         # The following settings are not used with sqlite3:
         'USER': 'HA_DB_USER',
         'PASSWORD': 'HA_DB_PASSWORD',
@@ -131,12 +131,20 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     "ha_cfg",
+    
     "hacore",
     "harest",
     
+    "haweb",
+    "compressor",
+    
+    "django_thermometer",
+    
+    "django_thermostat",
     # Uncomment the next line to enable the admin:
-    # 'django.contrib.admin',
+    'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
 )

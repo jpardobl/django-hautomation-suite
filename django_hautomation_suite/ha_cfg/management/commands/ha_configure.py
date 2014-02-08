@@ -158,9 +158,9 @@ class Command(BaseCommand):
         """Configures every directive needed by the django_haweb module"""
         vals = {}
         while True:
-            vals["HA_REST_API_HOST"] = raw_input("Insert Home Automation Python Project REST API host [http://localhost:8000]: ")
+            vals["HA_REST_API_HOST"] = raw_input("Insert Home Automation Python Project REST API host [http://%s:8000]: " % self.applied_vals["HA_WEB_SERVER_NAME"])
             if len(vals["HA_REST_API_HOST"]) == 0: 
-                vals["HA_REST_API_HOST"] = "http://localhost:8000"
+                vals["HA_REST_API_HOST"] = "http://%s:8000" % self.applied_vals["HA_WEB_SERVER_NAME"]
                 break
             if not re.match(self.IP_PATTERN, vals["HA_REST_API_HOST"]) and not re.match(self.FQDN_PATTERN, vals["HA_REST_API_HOST"]):
                 self.stderr.write("Must be a IP or a valid FQDN")
@@ -277,7 +277,7 @@ class Command(BaseCommand):
         return vals
 
     def handle(self, *args, **options):
-        logging.basicConfig(level=logging.DEBUG)
+        #logging.basicConfig(level=logging.DEBUG)
         self.gen_settings()
         self.apply_settings(self.database())
         self.apply_settings(self.server())

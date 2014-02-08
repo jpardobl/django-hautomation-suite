@@ -1,3 +1,3 @@
 include LICENSE
 include README.md
-recursive-include hautomation_x10/docs *
+recursive-include django_hautomation_suite	*

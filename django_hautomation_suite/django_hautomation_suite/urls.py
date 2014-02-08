@@ -9,7 +9,7 @@ urlpatterns = patterns("",
 if settings.DJANGO_HAUTOMATION_DEPLOYED:
     urlpatterns = urlpatterns + patterns('',
        
-        url(r'rest/', include('harest.urls')),
+        url(r'^rest/', include('harest.urls')),
     )
 if settings.DJANGO_HAWEB_DEPLOYED:
     urlpatterns = urlpatterns + patterns('',        
@@ -21,6 +21,6 @@ if settings.DJANGO_THERMOMETER_DEPLOYED:
     )    
 if settings.DJANGO_THERMOSTAT_DEPLOYED:
     urlpatterns = urlpatterns + patterns('',        
-        url(r'thermostat/', include('django_thermostat.urls')),
+        url(r'^thermostat/', include('django_thermostat.urls')),
     # url(r'^dev_therm/', include('dev_therm.foo.urls')),
     )   

@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_hautomation_suite',
-    version='0.2',
+    version='0.4',
     packages=['django_hautomation_suite', 'django_hautomation_suite.ha_cfg', ],
     include_package_data=True,
     license='BSD License',
