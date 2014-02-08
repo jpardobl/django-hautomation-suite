@@ -1,2 +1,4 @@
 /.project
 /.pydevproject
+/dist
+/django_hautomation_suite.egg-info

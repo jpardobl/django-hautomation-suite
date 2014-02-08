@@ -17,11 +17,14 @@ class Command(BaseCommand):
     FQDN_PATTERN = r"(?=^.{4,255}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)"
     IP_PATTERN = r""
     
+    applied_vals = {}
+    
     def gen_settings(self):
         shutil.copyfile(Command.DISTRO_SETTINGS_PATH, Command.CONFIGURED_SETTINGS_PATH)
                    
     def apply_settings(self, new_settings, origin_path = None, dest_path = None):
         self.stdout.write("Applying settings...")
+        
         if origin_path is None:
             origin_path = Command.CONFIGURED_SETTINGS_PATH
         with open(origin_path, "r") as fichero:
@@ -34,6 +37,8 @@ class Command(BaseCommand):
             dest_path = Command.CONFIGURED_SETTINGS_PATH
         with open(dest_path, "w") as fichero:
             fichero.write(content)
+        for key, val in new_settings.items():
+            self.applied_vals[key] = val
         
     def database(self):
         """
@@ -153,9 +158,9 @@ class Command(BaseCommand):
         """Configures every directive needed by the django_haweb module"""
         vals = {}
         while True:
-            vals["HA_REST_API_HOST"] = raw_input("Insert Home Automation Python Project REST API host [localhost]: ")
+            vals["HA_REST_API_HOST"] = raw_input("Insert Home Automation Python Project REST API host [http://localhost:8000]: ")
             if len(vals["HA_REST_API_HOST"]) == 0: 
-                vals["HA_REST_API_HOST"] = "localhost"
+                vals["HA_REST_API_HOST"] = "http://localhost:8000"
                 break
             if not re.match(self.IP_PATTERN, vals["HA_REST_API_HOST"]) and not re.match(self.FQDN_PATTERN, vals["HA_REST_API_HOST"]):
                 self.stderr.write("Must be a IP or a valid FQDN")
@@ -186,30 +191,48 @@ class Command(BaseCommand):
                 self.stderr.write("Must be a valid protocol name")
                 continue
             break
+        
         while True:
             vals["HA_HEATER_DID"] = raw_input("Insert the Heater domotic address: ")
             if len(vals["HA_HEATER_DID"]) == 0: 
                 self.stderr.write("Must be a valid address")
                 continue
             break
+        
         while True:
-            vals["HA_HEATER_API"] = raw_input("Insert the Home Automation Python Project REST API server: ")
+            default = "http://localhost:8000"
+            if "HA_REST_API_HOST" in self.applied_vals and self.applied_vals["HA_REST_API_HOST"] is not None:
+                default = self.applied_vals["HA_REST_API_HOST"]
+            
+            vals["HA_HEATER_API"] = raw_input("Insert the Home Automation Python Project REST API server [%s]: " % default)
+            if len(vals["HA_HEATER_API"]) == 0:
+                vals["HA_HEATER_API"] = default
             if not re.match(self.IP_PATTERN, vals["HA_HEATER_API"]) and not re.match(self.FQDN_PATTERN, vals["HA_HEATER_API"]):
                 self.stderr.write("Must be a IP or a valid FQDN")
                 continue
             break
+        
         while True:
-            vals["HA_HEATER_USERNAME"] = raw_input("Insert the Home Automation Python Project REST API username: ")
-            if len(vals["HA_HEATER_USERNAME"]) == 0: 
-                self.stderr.write("Must be a valid address")
-                continue
+            default = ""
+            if "HA_REST_API_USERNAME" in self.applied_vals and self.applied_vals["HA_REST_API_USERNAME"] is not None:
+                default = self.applied_vals["HA_REST_API_USERNAME"]
+            vals["HA_HEATER_USERNAME"] = raw_input("Insert the Home Automation Python Project REST API username [%s]: " % default)
+            if len(vals["HA_HEATER_USERNAME"]) == 0:
+                if default == "":
+                    self.stderr.write("Must be a valid username")
+                    continue                     
+                vals["HA_REST_API_USERNAME"] = default
+                
             break
+        
         while True:
-            vals["HA_HEATER_PASSWORD"] = raw_input("Insert the Home Automation Python Project REST API password: ")
+            if "HA_REST_API_PASSWORD" in self.applied_vals and self.applied_vals["HA_REST_API_PASSWORD"] is not None:
+                default = self.applied_vals["HA_REST_API_PASSWORD"]
+            vals["HA_HEATER_PASSWORD"] = raw_input("Insert the Home Automation Python Project REST API password [%s]: " % default)
             if len(vals["HA_HEATER_PASSWORD"]) == 0: 
-                self.stderr.write("Must be a valid address")
-                continue
-            break       
+                vals["HA_HEATER_PASSWORD"] = default
+            break   
+            
         while True:
             vals["HA_HEATER_MARGIN"] = raw_input("Insert the margin to add/substract when comparing temperatures : ")
             try:
@@ -227,11 +250,11 @@ class Command(BaseCommand):
                 continue
             break
         while True:
-            vals["HA_FLAME_STATS"] = raw_input("Activate flaming reports Yes|No: ")
-            if vals["HA_FLAME_STATS"] not in ("No", "Yes"):
+            vals["HA_FLAME_STATS_ENABLE"] = raw_input("Activate flaming reports Yes|No: ")
+            if vals["HA_FLAME_STATS_ENABLE"] not in ("No", "Yes"):
                 self.stderr.write("Answer not valid. Yes or No?")
                 continue
-            vals["HA_FLAME_STATS"] = (vals["HA_FLAME_STATS"] == "Yes")
+            vals["HA_FLAME_STATS_ENABLE"] = (vals["HA_FLAME_STATS_ENABLE"] == "Yes")
             break
         if vals["HA_FLAME_STATS"]:
             while True:
@@ -242,12 +265,16 @@ class Command(BaseCommand):
                 break
             
         while True:
-            vals["HA_TERMOMETER_SERVER"] = raw_input("Insert the thermometer API server: ")
+            vals["HA_TERMOMETER_SERVER"] = raw_input("Insert the thermometer API server [http://localhost]: ")
+            if len(vals["HA_TERMOMETER_SERVER"]) == 0:
+                vals["HA_TERMOMETER_SERVER"] = "http://localhost"
+                break
             if not re.match(self.IP_PATTERN, vals["HA_TERMOMETER_SERVER"]) and not re.match(self.FQDN_PATTERN, vals["HA_TERMOMETER_SERVER"]):
                 self.stderr.write("Must be a IP or a valid FQDN")
                 continue
 
             break
+        return vals
 
 
     def handle(self, *args, **options):
@@ -305,6 +332,6 @@ class Command(BaseCommand):
             self.apply_settings(
                 self.django_thermostat(),
                 self.THERMOSTAT_PATH,
-                django_thermostat_settings()
+                paths.django_thermostat_settings()
                 )
         self.apply_settings({"HA_DJANGO_THERMOSTAT_DEPLOYED": hathermostat})
