@@ -256,7 +256,7 @@ class Command(BaseCommand):
                 continue
             vals["HA_FLAME_STATS_ENABLE"] = (vals["HA_FLAME_STATS_ENABLE"] == "Yes")
             break
-        if vals["HA_FLAME_STATS"]:
+        if vals["HA_FLAME_STATS_ENABLE"]:
             while True:
                 vals["HA_FLAME_STATS_PATH"] = raw_input("Insert the flaming report path: ")
                 if len(vals["HA_FLAME_STATS_PATH"]) == 0: 
@@ -275,7 +275,6 @@ class Command(BaseCommand):
 
             break
         return vals
-
 
     def handle(self, *args, **options):
         logging.basicConfig(level=logging.DEBUG)
