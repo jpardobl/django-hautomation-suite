@@ -1,4 +1,4 @@
-import logging, re, shutil, pytz
+import logging, re, shutil, pytz, os
 from ha_cfg import paths
 from django.core.management.base import BaseCommand, CommandError
 
@@ -112,6 +112,17 @@ class Command(BaseCommand):
                 self.stderr.write("Invalid value, please insert a valid IP or FQDN")
                 continue
             break
+        return vals
+    
+    def statics(self):
+        """ Configures the following directives:
+        HA_STATIC
+        """
+        vals = {}
+
+        default = os.path.join(os.getcwd(), "static/")
+        vals["HA_STATIC"] = raw_input("Where do you want to static assets? [%s]:" % default)
+        if len(vals["HA_STATIC"]) == 0: vals["HA_STATIC"] = default
         return vals
     
     def time_zone(self):
@@ -282,6 +293,8 @@ class Command(BaseCommand):
         self.apply_settings(self.database())
         self.apply_settings(self.server())
         self.apply_settings(self.time_zone())
+        self.apply_settings(self.statics())
+        
         while True:
             harest = raw_input("Want to deploy the Home Automation Python Project REST API server (module django_hautomation)? Yes|No: ")
             if harest not in ("No", "Yes"):

@@ -12,7 +12,7 @@ class Command(BaseCommand):
     help = 'Once the configuration has been done and applied, this command populates the database'
 
     def handle(self, *args, **options):
-        logging.basicConfig(level=logging.DEBUG)
+        #logging.basicConfig(level=logging.DEBUG)
         
         #shall we create the database
         

@@ -1,6 +1,6 @@
 # Django settings for django_hautomation_suite project.
 
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -15,88 +15,55 @@ HA_PASSWORD = "HA_REST_API_PASSWORD"
 HA_USERNAME = "HA_REST_API_USERNAME"
 
 
-DJANGO_HAUTOMATION_DEPLOYED = False
-DJANGO_HAWEB_DEPLOYED = False
-DJANGO_THERMOMETER_DEPLOYED = False
-DJANGO_THERMOSTAT_DEPLOYED = True
+DJANGO_HAUTOMATION_DEPLOYED = HA_DJANGO_HAUTOMATION_DEPLOYED
+DJANGO_HAWEB_DEPLOYED = HA_DJANGO_HAWEB_DEPLOYED
+DJANGO_THERMOMETER_DEPLOYED = HA_DJANGO_THERMOMETER_DEPLOYED
+DJANGO_THERMOSTAT_DEPLOYED = HA_DJANGO_THERMOSTAT_DEPLOYED
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3', # Add 'postgresql_psycopg2', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'ggggg',                      # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+        'ENGINE': 'django.db.backends.HA_DB_TYPE', 
+        'NAME': 'HA_DB_NAME', 
         'USER': 'HA_DB_USER',
         'PASSWORD': 'HA_DB_PASSWORD',
-        'HOST': 'HA_DB_HOST',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': 'HA_DB_PORT',                      # Set to empty string for default.
+        'HOST': 'HA_DB_HOST',
+        'PORT': 'HA_DB_PORT', 
     }
 }
 
-# Hosts/domain names that are valid for this site; required if DEBUG is False
-# See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", ]
+ALLOWED_HOSTS = ["HA_WEB_SERVER_NAME", ]
 
-# Local time zone for this installation. Choices can be found here:
-# http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
-# although not all choices may be available on all operating systems.
-# In a Windows environment this must be set to your system time zone.
-TIME_ZONE = 'Europe/Madrid'
+TIME_ZONE = 'HA_TIME_ZONE'
 
-# Language code for this installation. All choices can be found here:
-# http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
 
 SITE_ID = 1
 
-# If you set this to False, Django will make some optimizations so as not
-# to load the internationalization machinery.
 USE_I18N = True
 
-# If you set this to False, Django will not format dates, numbers and
-# calendars according to the current locale.
 USE_L10N = True
 
-# If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
-# Absolute filesystem path to the directory that will hold user-uploaded files.
-# Example: "/var/www/example.com/media/"
+
 MEDIA_ROOT = ''
 
-# URL that handles the media served from MEDIA_ROOT. Make sure to use a
-# trailing slash.
-# Examples: "http://example.com/media/", "http://media.example.com/"
 MEDIA_URL = ''
 
-# Absolute path to the directory static files should be collected to.
-# Don't put anything in this directory yourself; store your static files
-# in apps' "static/" subdirectories and in STATICFILES_DIRS.
-# Example: "/var/www/example.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/raton/komodo_work/pfg/whole/package/django-hautomation-suite/django_hautomation_suite/static/'
 
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
 STATIC_URL = '/static/'
 
-# Additional locations of static files
-STATICFILES_DIRS = (
-    # Put strings here, like "/home/html/static" or "C:/www/django/static".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+STATICFILES_DIRS = ()
 
-# List of finder classes that know how to find static files in
-# various locations.
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
-# Make this unique, and don't share it with anybody.
 SECRET_KEY = 'cr!vx#to^+*^y8*_0)_c25*4p(ksxb1=uwo*-zch+um(7d)631'
 
-# List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
@@ -115,45 +82,30 @@ MIDDLEWARE_CLASSES = (
 
 ROOT_URLCONF = 'django_hautomation_suite.urls'
 
-# Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'django_hautomation_suite.wsgi.application'
 
-TEMPLATE_DIRS = (
-    # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
-    # Always use forward slashes, even on Windows.
-    # Don't forget to use absolute paths, not relative paths.
-)
+TEMPLATE_DIRS = ()
 
 INSTALLED_APPS = (
+    #defaul apps
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    
+    #project apps
     "ha_cfg",
-    
     "hacore",
     "harest",
-    
     "haweb",
     "compressor",
-    
     "django_thermometer",
-    
     "django_thermostat",
-    # Uncomment the next line to enable the admin:
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    'gunicorn',
 )
 
-# A sample logging configuration. The only tangible logging
-# performed by this configuration is to send an email to
-# the site admins on every HTTP 500 error when DEBUG=False.
-# See http://docs.djangoproject.com/en/dev/topics/logging for
-# more details on how to customize your logging configuration.
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,

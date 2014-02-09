@@ -8,7 +8,7 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name='django_hautomation_suite',
-    version='0.4',
+    version='0.5',
     packages=['django_hautomation_suite', 'django_hautomation_suite.ha_cfg', ],
     include_package_data=True,
     license='BSD License',
@@ -26,6 +26,7 @@ setup(
       "simplejson==2.6.2",
       "requests==1.2.0",
       "pytz",
+      "gunicorn",      
     ),
     #test_suite='hautomation_x10.tests.main',
     #tests_require=("selenium", "requests"),
