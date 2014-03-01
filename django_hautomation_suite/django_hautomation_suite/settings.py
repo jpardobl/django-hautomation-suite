@@ -22,7 +22,7 @@ DJANGO_THERMOSTAT_DEPLOYED = False
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.HA_DB_TYPE', 
+        'ENGINE': 'django.db.backends.', 
         'NAME': 'HA_DB_NAME', 
         'USER': 'HA_DB_USER',
         'PASSWORD': 'HA_DB_PASSWORD',
@@ -33,7 +33,7 @@ DATABASES = {
 
 ALLOWED_HOSTS = ["HA_WEB_SERVER_NAME", ]
 
-TIME_ZONE = 'HA_TIME_ZONE'
+TIME_ZONE = 'Europe/Madrid'
 
 LANGUAGE_CODE = 'en-us'
 

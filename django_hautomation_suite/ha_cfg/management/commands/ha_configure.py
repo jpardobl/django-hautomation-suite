@@ -14,6 +14,12 @@ class Command(BaseCommand):
     HAUTOMATION_X10_PATH = "django_hautomation_suite/distro_hautomation_x10_settings.py"
     THERMOSTAT_PATH = "django_hautomation_suite/distro_thermostat_settings.py"
     
+    SUPERVISOR_HASUITE_PATH = "django_hautomation_suite/distro_hasuite.conf"
+    SUPERVISOR_EVAL_HASUITE_THERM_PATH = "django_hautomation_suite/distro_eval_hasuite_therm.conf"
+    
+    SUPERVISOR_HASUITE_PATH_DEST = "supervisor_hasuite.conf"
+    SUPERVISOR_EVAL_HASUITE_THERM_PATH_DEST = "supervisor_eval_hasuite_therm.conf"
+    
     FQDN_PATTERN = r"(?=^.{4,255}$)(^((?!-)[a-zA-Z0-9-]{1,63}(?<!-)\.)+[a-zA-Z]{2,63}$)"
     IP_PATTERN = r""
     
@@ -276,9 +282,13 @@ class Command(BaseCommand):
                 break
             
         while True:
-            vals["HA_TERMOMETER_SERVER"] = raw_input("Insert the thermometer API server [http://localhost]: ")
+            default = "http://localhost"
+            if "HA_REST_API_HOST" in self.applied_vals and self.applied_vals["HA_REST_API_HOST"] is not None:
+                default = self.applied_vals["HA_REST_API_HOST"]
+                
+            vals["HA_TERMOMETER_SERVER"] = raw_input("Insert the thermometer API server [%s]: " % default)
             if len(vals["HA_TERMOMETER_SERVER"]) == 0:
-                vals["HA_TERMOMETER_SERVER"] = "http://localhost"
+                vals["HA_TERMOMETER_SERVER"] = default
                 break
             if not re.match(self.IP_PATTERN, vals["HA_TERMOMETER_SERVER"]) and not re.match(self.FQDN_PATTERN, vals["HA_TERMOMETER_SERVER"]):
                 self.stderr.write("Must be a IP or a valid FQDN")
@@ -287,6 +297,57 @@ class Command(BaseCommand):
             break
         return vals
 
+    def supervisor(self):
+        """ Configures the following directives:
+        PROCESS_WORKING_DIR
+        PROCESS_USER
+        """
+         
+        vals = {}
+
+        vals["PROCESS_WORKING_DIR"] = os.getcwd()
+        while True:
+            vals["PROCESS_USER"] = raw_input("Please enter the user that must be used to run the daemon process: ")
+            if len(vals["PROCESS_USER"]) == 0:
+                self.stderr.write("Invalid user")
+                continue
+            break
+        while True:
+            vals["SECONDS_INTERVAL"] = raw_input("PLease enter the seconds to wait before next thermostat loop: ")
+            try:
+                s = int(vals["SECONDS_INTERVAL"])
+                if s < 10: raise Exception("To high")
+                break
+            except:
+                self.stderr.write("Invalid number of seconds, must be over 10s")
+                continue
+        return vals
+
+    def nginx(self):
+        """ Configures the following directives:
+        PROCESS_WORKING_DIR
+        PROCESS_USER
+        """
+         
+        vals = {}
+
+        vals["PROCESS_WORKING_DIR"] = os.getcwd()
+        while True:
+            vals["PROCESS_USER"] = raw_input("Please enter the user that must be used to run the daemon process: ")
+            if len(vals["PROCESS_USER"]) == 0:
+                self.stderr.write("Invalid user")
+                continue
+            break
+        while True:
+            vals["SECONDS_INTERVAL"] = raw_input("PLease enter the seconds to wait before next thermostat loop: ")
+            try:
+                s = int(vals["SECONDS_INTERVAL"])
+                if s < 10: raise Exception("To high")
+                break
+            except:
+                self.stderr.write("Invalid number of seconds, must be over 10s")
+                continue
+        return vals
     def handle(self, *args, **options):
         #logging.basicConfig(level=logging.DEBUG)
         self.gen_settings()
@@ -294,6 +355,9 @@ class Command(BaseCommand):
         self.apply_settings(self.server())
         self.apply_settings(self.time_zone())
         self.apply_settings(self.statics())
+        supervisor = self.supervisor()
+        self.apply_settings(supervisor, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH_DEST)
+        self.apply_settings(supervisor, self.SUPERVISOR_HASUITE_PATH, self.SUPERVISOR_HASUITE_PATH_DEST)
         
         while True:
             harest = raw_input("Want to deploy the Home Automation Python Project REST API server (module django_hautomation)? Yes|No: ")
