@@ -312,7 +312,7 @@ class Command(BaseCommand):
                 self.stderr.write("Invalid user")
                 continue
             break
-        while True:
+        while self.applied_vals["HA_DJANGO_THERMOSTAT_DEPLOYED"]:
             vals["SECONDS_INTERVAL"] = raw_input("PLease enter the seconds to wait before next thermostat loop: ")
             try:
                 s = int(vals["SECONDS_INTERVAL"])
@@ -348,6 +348,7 @@ class Command(BaseCommand):
                 self.stderr.write("Invalid number of seconds, must be over 10s")
                 continue
         return vals
+    
     def handle(self, *args, **options):
         #logging.basicConfig(level=logging.DEBUG)
         self.gen_settings()
@@ -355,9 +356,6 @@ class Command(BaseCommand):
         self.apply_settings(self.server())
         self.apply_settings(self.time_zone())
         self.apply_settings(self.statics())
-        supervisor = self.supervisor()
-        self.apply_settings(supervisor, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH_DEST)
-        self.apply_settings(supervisor, self.SUPERVISOR_HASUITE_PATH, self.SUPERVISOR_HASUITE_PATH_DEST)
         
         while True:
             harest = raw_input("Want to deploy the Home Automation Python Project REST API server (module django_hautomation)? Yes|No: ")
@@ -411,3 +409,8 @@ class Command(BaseCommand):
                 paths.django_thermostat_settings()
                 )
         self.apply_settings({"HA_DJANGO_THERMOSTAT_DEPLOYED": hathermostat})
+        
+        supervisor = self.supervisor()
+        self.apply_settings(supervisor, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH, self.SUPERVISOR_EVAL_HASUITE_THERM_PATH_DEST)
+        self.apply_settings(supervisor, self.SUPERVISOR_HASUITE_PATH, self.SUPERVISOR_HASUITE_PATH_DEST)
+       
