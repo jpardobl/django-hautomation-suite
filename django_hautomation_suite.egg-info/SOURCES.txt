@@ -27,6 +27,7 @@ django_hautomation_suite/ha_cfg/tests.py
 django_hautomation_suite/ha_cfg/views.py
 django_hautomation_suite/ha_cfg/management/__init__.py
 django_hautomation_suite/ha_cfg/management/commands/__init__.py
+django_hautomation_suite/ha_cfg/management/commands/backup_config.py
 django_hautomation_suite/ha_cfg/management/commands/deploy_static.py
 django_hautomation_suite/ha_cfg/management/commands/ha_apply_config.py
 django_hautomation_suite/ha_cfg/management/commands/ha_configure.py
