@@ -1,6 +1,6 @@
 # Django settings for django_hautomation_suite project.
 
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -10,20 +10,20 @@ ADMINS = (
 MANAGERS = ADMINS
 
 #used by the haweb to find the REST API server
-HA_SERVER = "HA_REST_API_HOST"
-HA_PASSWORD = "HA_REST_API_PASSWORD"
-HA_USERNAME = "HA_REST_API_USERNAME"
+HA_SERVER = "http://localhost:8000"
+HA_PASSWORD = "soportep"
+HA_USERNAME = "raton"
 
 
-DJANGO_HAUTOMATION_DEPLOYED = False
-DJANGO_HAWEB_DEPLOYED = False
+DJANGO_HAUTOMATION_DEPLOYED = True
+DJANGO_HAWEB_DEPLOYED = True
 DJANGO_THERMOMETER_DEPLOYED = False
-DJANGO_THERMOSTAT_DEPLOYED = False
+DJANGO_THERMOSTAT_DEPLOYED = True
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.', 
-        'NAME': 'HA_DB_NAME', 
+        'ENGINE': 'django.db.backends.sqlite3', 
+        'NAME': 'dev.sqlite', 
         'USER': 'HA_DB_USER',
         'PASSWORD': 'HA_DB_PASSWORD',
         'HOST': 'HA_DB_HOST',
@@ -31,7 +31,7 @@ DATABASES = {
     }
 }
 
-ALLOWED_HOSTS = ["HA_WEB_SERVER_NAME", ]
+ALLOWED_HOSTS = ["localhost", ]
 
 TIME_ZONE = 'Europe/Madrid'
 
@@ -50,7 +50,7 @@ MEDIA_ROOT = ''
 
 MEDIA_URL = ''
 
-STATIC_ROOT = '/home/raton/komodo_work/pfg/whole/package/django-hautomation-suite/django_hautomation_suite/static/'
+STATIC_ROOT = '/home/raton/pycharm_projects/django-hautomation-suite/django_hautomation_suite/static/'
 
 STATIC_URL = '/static/'
 
@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     "harest",
     "haweb",
     "compressor",
+
     "django_thermometer",
     "django_thermostat",
     'django.contrib.admin',

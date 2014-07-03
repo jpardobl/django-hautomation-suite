@@ -100,6 +100,7 @@ INSTALLED_APPS = (
     "harest",
     "haweb",
     "compressor",
+
     "django_thermometer",
     "django_thermostat",
     'django.contrib.admin',
